@@ -1,6 +1,6 @@
 # Microsoft 365 Copilot Prompt Builder
 
-A standalone HTML prompt-building app for creating structured, role-aware prompts for Microsoft 365 Copilot.
+A standalone HTML prompt-building app for creating structured, role-aware prompts for Microsoft 365 Copilot. Designed primarily for user training on how to create prompts in Microsoft 365 Copilot, using the Microsoft GCSE methodology, Goal, Context, Source, Expectation.
 
 The app guides users through prompt construction by combining intent, role context, industry and sub-vertical targeting, expectations, disclaimers, editable placeholders, and a GCSE-style progress flow. It is packaged as a static single-page app, so it can run from GitHub Pages, SharePoint, any static web server, or directly from a local browser.
 
