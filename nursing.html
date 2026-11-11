@@ -768,6 +768,39 @@
       { label: "Operational context", fragment: "with operational and workflow constraints for <<Process or setting>>", children: sources },
     ];
 
+    const avatarContextOptions = [
+      {
+        label: "Professional headshot avatar",
+        fragment: "as a professional headshot of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action or expression>>",
+        children: sources
+      },
+      {
+        label: "On-shift action avatar",
+        fragment: "as an action-style avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: sources
+      },
+      {
+        label: "Leadership round avatar",
+        fragment: "as a nursing leadership avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: sources
+      },
+      {
+        label: "Team huddle avatar",
+        fragment: "as a collaborative team-huddle avatar featuring <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: sources
+      },
+      {
+        label: "Patient education avatar",
+        fragment: "as a patient-education avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: sources
+      },
+      {
+        label: "Telehealth avatar",
+        fragment: "as a telehealth-style avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: sources
+      },
+    ];
+
     const tree = [
       {
         label: "I want to create",
@@ -780,7 +813,7 @@
           { label: "A unit workflow or SOP", fragment: "a unit workflow or SOP for <<Workflow or process>>", children: contextOptions },
           { label: "A breakout session deck outline", fragment: "a breakout session deck outline for <<Nursing topic>>", children: contextOptions },
           { label: "An image concept", fragment: "an image-generation prompt for <<Nursing topic>> appropriate for clinical and professional audiences", children: contextOptions },
-          { label: "An avatar concept", fragment: "an avatar-generation prompt for <<Nurse persona or role>> for a meeting breakout session", children: contextOptions },
+          { label: "An avatar concept", fragment: "an avatar-generation prompt for <<Nurse persona or role>> for a meeting breakout session", children: avatarContextOptions },
         ],
       },
       {
