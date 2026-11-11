@@ -56,6 +56,14 @@
       font-size: 2rem;
     }
 
+    .header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     .pill {
       display: inline-flex;
       align-items: center;
@@ -78,6 +86,10 @@
       gap: 10px;
       flex-wrap: wrap;
       margin-bottom: 16px;
+    }
+    .action-toolbar {
+      margin-top: 10px;
+      margin-bottom: 18px;
     }
 
     .btn {
@@ -469,7 +481,10 @@
   <div class="page">
     <main class="main">
       <header class="header">
-        <div class="pill">🩺 Nursing-focused GCSE flow</div>
+        <div class="header-top">
+          <div class="pill">🩺 Nursing-focused GCSE flow</div>
+          <a class="btn" href="./index.html">← General Prompt Builder</a>
+        </div>
         <h1>Prompt Builder Nursing Edition</h1>
         <p class="sub">Create clinical and non-clinical nurse-ready prompts, including image and avatar prompt options for breakout sessions.</p>
       </header>
@@ -478,14 +493,6 @@
         <button class="btn" id="openGcseBtn">What is GCSE?</button>
         <button class="btn" id="openDisclaimerBtn">Disclaimer</button>
         <button class="btn" id="openInstructionsBtn">Instructions</button>
-      </div>
-
-      <div class="toolbar">
-        <a class="btn" href="./index.html">← General Prompt Builder</a>
-        <button class="btn" id="backBtn">Back</button>
-        <button class="btn" id="skipBtn">Skip</button>
-        <button class="btn" id="doneBtn">Done</button>
-        <button class="btn" id="resetBtn">Reset</button>
       </div>
 
       <section class="selectors">
@@ -504,6 +511,13 @@
           </div>
         </div>
       </section>
+
+      <div class="toolbar action-toolbar">
+        <button class="btn" id="backBtn">Back</button>
+        <button class="btn" id="skipBtn">Skip</button>
+        <button class="btn" id="doneBtn">Done</button>
+        <button class="btn" id="resetBtn">Reset</button>
+      </div>
 
       <div class="progress" id="progress"></div>
       <div class="crumbs" id="crumbs"></div>
