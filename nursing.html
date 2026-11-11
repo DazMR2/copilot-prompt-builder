@@ -152,7 +152,18 @@
     }
 
     .progress .step.active { background: #bae6fd; color: #0f4c81; }
-    .progress .step.done { background: #99f6e4; color: #0f766e; }
+    .progress .step.done { box-shadow: inset 0 0 0 1px rgba(15, 23, 42, .08); }
+
+    .progress .step.step-0 { background: #e0f2fe; color: #0c4a6e; }
+    .progress .step.step-1 { background: #dcfce7; color: #166534; }
+    .progress .step.step-2 { background: #fef3c7; color: #92400e; }
+    .progress .step.step-3 { background: #ede9fe; color: #5b21b6; }
+    .progress .step.step-4 { background: #fce7f3; color: #9d174d; }
+    .progress .step.step-0.active { background: #bae6fd; }
+    .progress .step.step-1.active { background: #bbf7d0; }
+    .progress .step.step-2.active { background: #fde68a; }
+    .progress .step.step-3.active { background: #ddd6fe; }
+    .progress .step.step-4.active { background: #fbcfe8; }
 
     .helpers {
       display: flex;
@@ -333,15 +344,7 @@
       border-color: #7dd3fc;
       background: #f0f9ff;
     }
-    .sidebar-progress-item.done {
-      border-color: #99f6e4;
-      background: #ecfdf5;
-    }
-    .sidebar-progress-item.done .dot {
-      background: #0f766e;
-      color: #fff;
-      border-color: #0f766e;
-    }
+    .sidebar-progress-item.done { box-shadow: inset 0 0 0 1px rgba(15, 23, 42, .06); }
     .sidebar-progress-item.active .dot {
       background: #e0f2fe;
       border-color: #7dd3fc;
@@ -363,6 +366,24 @@
       text-overflow: ellipsis;
       max-width: 280px;
     }
+
+    .sidebar-progress-item.step-0 { border-color: #bae6fd; background: #f0f9ff; }
+    .sidebar-progress-item.step-1 { border-color: #bbf7d0; background: #f0fdf4; }
+    .sidebar-progress-item.step-2 { border-color: #fde68a; background: #fffbeb; }
+    .sidebar-progress-item.step-3 { border-color: #ddd6fe; background: #f5f3ff; }
+    .sidebar-progress-item.step-4 { border-color: #fbcfe8; background: #fdf2f8; }
+
+    .sidebar-progress-item.step-0 .dot { background: #e0f2fe; border-color: #7dd3fc; color: #0c4a6e; }
+    .sidebar-progress-item.step-1 .dot { background: #dcfce7; border-color: #86efac; color: #166534; }
+    .sidebar-progress-item.step-2 .dot { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
+    .sidebar-progress-item.step-3 .dot { background: #ede9fe; border-color: #c4b5fd; color: #5b21b6; }
+    .sidebar-progress-item.step-4 .dot { background: #fce7f3; border-color: #f9a8d4; color: #9d174d; }
+
+    .sidebar-progress-item.step-0.done .dot { background: #0369a1; border-color: #0369a1; color: #fff; }
+    .sidebar-progress-item.step-1.done .dot { background: #15803d; border-color: #15803d; color: #fff; }
+    .sidebar-progress-item.step-2.done .dot { background: #b45309; border-color: #b45309; color: #fff; }
+    .sidebar-progress-item.step-3.done .dot { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+    .sidebar-progress-item.step-4.done .dot { background: #be185d; border-color: #be185d; color: #fff; }
 
     .sheet-overlay {
       position: fixed;
@@ -934,7 +955,7 @@
     function renderProgress() {
       const current = getCurrentLevel();
       el.progress.innerHTML = levels.map((l, idx) => {
-        let cls = "step";
+        let cls = `step step-${idx}`;
         if (idx < current) cls += " done";
         else if (idx === current) cls += " active";
         return `<span class="${cls}">${l.title}</span>`;
@@ -1113,7 +1134,7 @@
     function renderSidebarProgress() {
       const current = getCurrentLevel();
       el.sidebarProgress.innerHTML = `<h3>GCSE Progress</h3>` + levels.map((level, idx) => {
-        let cls = "sidebar-progress-item";
+        let cls = `sidebar-progress-item step-${idx}`;
         if (idx < current) cls += " done";
         else if (idx === current) cls += " active";
         const selected = state.selections[idx];
