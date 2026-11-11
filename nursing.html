@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Builder Nursing Edition</title>
+  <style>
+    :root {
+      --bg: #f4fbfd;
+      --bg-2: #e7f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #0f766e;
+      --primary-2: #0ea5a6;
+      --accent: #0369a1;
+      --border: #cbd5e1;
+      --good: #15803d;
+      --warn: #b45309;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 10%, #bae6fd 0%, transparent 25%),
+                  radial-gradient(circle at 85% 5%, #99f6e4 0%, transparent 24%),
+                  linear-gradient(135deg, var(--bg), var(--bg-2));
+      min-height: 100vh;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      min-height: 100vh;
+    }
+
+    .main {
+      padding: 28px;
+    }
+
+    .sidebar {
+      border-left: 1px solid var(--border);
+      background: #ffffffde;
+      backdrop-filter: blur(6px);
+      padding: 24px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+    }
+
+    .header h1 {
+      margin: 6px 0 8px;
+      font-size: 2rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin: 8px 0 18px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .92rem;
+    }
+
+    .btn:hover { border-color: #94a3b8; background: #f8fafc; }
+    .btn.primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .btn.primary:hover { background: #0b5e59; }
+
+    .selectors {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .selectors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: .85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    select, input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .progress {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 16px;
+    }
+
+    .progress .step {
+      background: #e2e8f0;
+      color: #334155;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .82rem;
+      font-weight: 600;
+    }
+
+    .progress .step.active { background: #bae6fd; color: #0f4c81; }
+    .progress .step.done { background: #99f6e4; color: #0f766e; }
+
+    .helpers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: .8rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .chip:hover { background: #075985; }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .title-row h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #7dd3fc;
+      box-shadow: 0 8px 18px rgba(2, 132, 199, .12);
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+    .card p {
+      margin: 0;
+      font-size: .84rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 10px 0 14px;
+    }
+
+    .crumb {
+      background: #e0f2fe;
+      color: #0c4a6e;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .8rem;
+      font-weight: 600;
+      border: 1px solid #bae6fd;
+      cursor: pointer;
+    }
+
+    .prompt-box {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+      line-height: 1.5;
+      min-height: 160px;
+      white-space: pre-wrap;
+    }
+
+    .placeholder {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      border-radius: 8px;
+      padding: 2px 8px;
+      margin: 0 2px;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    .placeholder.filled {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #166534;
+    }
+
+    .placeholder-editor {
+      margin-top: 12px;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 10px;
+      background: #fffbeb;
+    }
+
+    .placeholder-editor h4 {
+      margin: 0 0 8px;
+      font-size: .92rem;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: .84rem;
+      color: var(--muted);
+    }
+
+    .good { color: var(--good); font-weight: 700; }
+    .warn { color: var(--warn); font-weight: 700; }
+
+    .tip {
+      margin-top: 18px;
+      border: 1px solid #bae6fd;
+      background: #e0f2fe;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: .83rem;
+      color: #0c4a6e;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 1180px) {
+      .page { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-left: 0;
+        border-top: 1px solid var(--border);
+      }
+      .cards { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+      .selectors-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .main, .sidebar { padding: 16px; }
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main class="main">
+      <header class="header">
+        <div class="pill">🩺 Nursing-focused GCSE flow</div>
+        <h1>Prompt Builder Nursing Edition</h1>
+        <p class="sub">Create clinical and non-clinical nurse-ready prompts, including image and avatar prompt options for breakout sessions.</p>
+      </header>
+
+      <div class="toolbar">
+        <a class="btn" href="./index.html">← General Prompt Builder</a>
+        <button class="btn" id="backBtn">Back</button>
+        <button class="btn" id="skipBtn">Skip</button>
+        <button class="btn" id="doneBtn">Done</button>
+        <button class="btn" id="resetBtn">Reset</button>
+      </div>
+
+      <section class="selectors">
+        <div class="selectors-grid">
+          <div class="field">
+            <label for="providerSelect">Industry (Provider Type)</label>
+            <select id="providerSelect"></select>
+          </div>
+          <div class="field">
+            <label for="specialtySelect">Sub-Vertical (Medical Specialization)</label>
+            <select id="specialtySelect"></select>
+          </div>
+          <div class="field">
+            <label for="roleSelect">Role (Nurse Type)</label>
+            <select id="roleSelect"></select>
+          </div>
+        </div>
+      </section>
+
+      <div class="progress" id="progress"></div>
+      <div class="crumbs" id="crumbs"></div>
+      <div class="helpers" id="helpers"></div>
+
+      <div class="title-row">
+        <h2 id="levelTitle">Goal</h2>
+      </div>
+
+      <section class="cards" id="options"></section>
+    </main>
+
+    <aside class="sidebar">
+      <h2 style="margin-top:0">Your Nursing Prompt</h2>
+      <div class="toolbar" style="margin-top:6px">
+        <button class="btn primary" id="copyBtn">Copy Prompt</button>
+        <button class="btn" id="launchBtn">Launch Copilot</button>
+      </div>
+
+      <div class="prompt-box" id="promptPreview">Select options to build your prompt.</div>
+      <div class="placeholder-editor" id="placeholderEditor" style="display:none"></div>
+      <div class="hint" id="statusHint"></div>
+
+      <div class="tip">
+        <strong>Tip:</strong> Review generated prompt content for clinical accuracy, local policy alignment, and privacy requirements before use.
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const levels = [
+      { title: "Goal", subtitle: "What nursing outcome do you want?" },
+      { title: "Goal Task", subtitle: "What deliverable or task is needed?" },
+      { title: "Context", subtitle: "What patient/team/operational context matters?" },
+      { title: "Source", subtitle: "What notes/data/references should Copilot use?" },
+      { title: "Expectations", subtitle: "What structure, tone, and quality bar do you need?" },
+    ];
+
+    const providers = [
+      {
+        id: "general",
+        label: "General Nursing",
+        guidance: "",
+        specializations: [{ id: "general", label: "General", guidance: "" }],
+      },
+      {
+        id: "acute-care",
+        label: "Acute Care / Hospital",
+        guidance: "Apply an acute-care lens focused on patient safety, timely escalation, and multidisciplinary coordination.",
+        specializations: [
+          { id: "general", label: "General", guidance: "" },
+          { id: "med-surg", label: "Medical-Surgical", guidance: "Narrow to med-surg priorities like handoff quality, throughput, and risk monitoring." },
+          { id: "icu", label: "ICU / Critical Care", guidance: "Narrow to ICU priorities with high acuity surveillance and rapid escalation pathways." },
+          { id: "ed", label: "Emergency / ED", guidance: "Narrow to ED priorities such as triage speed, rapid stabilization, and communication clarity." },
+          { id: "perioperative", label: "Perioperative / OR / PACU", guidance: "Narrow to perioperative workflow safety, transfer accuracy, and post-op monitoring." },
+        ],
+      },
+      {
+        id: "ambulatory",
+        label: "Ambulatory / Clinic",
+        guidance: "Apply an ambulatory lens with continuity of care, access, preventive care, and patient education outcomes.",
+        specializations: [
+          { id: "general", label: "General", guidance: "" },
+          { id: "primary-care", label: "Primary Care", guidance: "Narrow to chronic follow-up, preventive care, and patient engagement priorities." },
+          { id: "cardiology", label: "Cardiology", guidance: "Narrow to cardiology priorities like symptom trends, adherence, and risk reduction." },
+          { id: "oncology", label: "Oncology", guidance: "Narrow to oncology priorities with symptom management and compassionate communication." },
+          { id: "pediatrics", label: "Pediatrics", guidance: "Narrow to pediatric priorities with family-centered communication and safety." },
+        ],
+      },
+      {
+        id: "post-acute-community",
+        label: "Post-Acute / Community",
+        guidance: "Apply a post-acute/community lens with care transitions, social context, and longitudinal outcomes.",
+        specializations: [
+          { id: "general", label: "General", guidance: "" },
+          { id: "home-health", label: "Home Health", guidance: "Narrow to home-health priorities such as caregiver readiness and follow-up ownership." },
+          { id: "hospice", label: "Hospice / Palliative", guidance: "Narrow to comfort care, goals-of-care communication, and caregiver support." },
+          { id: "ltc-snf", label: "Long-Term Care / SNF", guidance: "Narrow to chronic condition oversight, falls prevention, and quality indicators." },
+          { id: "public-health", label: "Public / Community Health", guidance: "Narrow to outreach, prevention, equity, and program outcomes." },
+        ],
+      },
+    ];
+
+    const roles = [
+      { id: "general", label: "General Nursing", guidance: "" },
+      { id: "rn", label: "RN (Registered Nurse)", guidance: "Frame for bedside RN workflows with clear patient priorities, safety checks, and escalation triggers." },
+      { id: "lpn", label: "LPN/LVN", guidance: "Frame for practical nursing workflows with explicit task steps, documentation cues, and escalation criteria." },
+      { id: "np", label: "Nurse Practitioner (NP)", guidance: "Frame for advanced practice with assessment support, coordinated follow-up, and evidence-informed recommendations." },
+      { id: "cns", label: "Clinical Nurse Specialist (CNS)", guidance: "Frame for practice improvement with evidence translation, coaching, and measurable outcomes." },
+      { id: "crna", label: "CRNA", guidance: "Frame for perioperative safety, anesthesia workflow communication, and risk-informed monitoring." },
+      { id: "cnm", label: "CNM", guidance: "Frame for maternal-newborn care with patient-centered education and safety-conscious coordination." },
+      { id: "case-manager", label: "Nurse Case Manager", guidance: "Frame for transitions of care, barriers, utilization constraints, and follow-up accountability." },
+      { id: "informatics", label: "Nurse Informatics Specialist", guidance: "Frame for clinical systems usability, adoption risk, and data quality outcomes." },
+      { id: "educator", label: "Nurse Educator", guidance: "Frame for competency development with scenario-based learning and measurable outcomes." },
+      { id: "manager", label: "Nurse Manager/Director", guidance: "Frame for leadership decisions around staffing, quality, safety, and operational tradeoffs." },
+    ];
+
+    const roleContextIdeas = {
+      general: [
+        "safe shift handoff and continuity of care",
+        "patient safety and escalation readiness",
+        "patient education clarity and adherence support",
+        "team workflow efficiency and reduced documentation burden",
+        "breakout-session facilitation with practical nursing examples",
+      ],
+      rn: ["clinical deterioration response", "medication workflow reliability", "discharge readiness and teaching", "family communication and expectations"],
+      lpn: ["routine care workflow", "documentation support quality", "comfort and monitoring consistency"],
+      np: ["advanced care planning", "ambulatory clinic flow", "chronic condition management"],
+      cns: ["evidence translation into practice", "quality initiative implementation", "care standardization strategy"],
+      crna: ["pre-op assessment quality", "PACU handoff clarity", "procedure safety coordination"],
+      cnm: ["prenatal support communication", "postpartum care transitions", "labor support collaboration"],
+      "case-manager": ["transition-of-care barriers", "utilization alignment", "post-discharge follow-up ownership"],
+      informatics: ["EHR workflow optimization", "clinical change enablement", "documentation data quality"],
+      educator: ["onboarding pathway design", "simulation and debrief quality", "competency reinforcement plans"],
+      manager: ["staffing optimization", "quality dashboard interpretation", "leadership communication cadence"],
+    };
+
+    const roleExpectationIdeas = {
+      general: [
+        "Use SBAR format with risks and immediate actions.",
+        "End with a prioritized action list, owners, and timing.",
+        "Balance clinical priorities with operational and compliance realities.",
+      ],
+      rn: [
+        "Make this handoff-ready with monitoring priorities and pending tasks.",
+        "Highlight safety concerns and escalation triggers.",
+        "Include concise patient teaching points and teach-back cues.",
+      ],
+      lpn: [
+        "Provide a practical checklist with explicit escalation criteria.",
+        "Keep language clear, concise, and shift-ready.",
+        "Include documentation prompts to support continuity of care.",
+      ],
+      np: [
+        "Organize by assessment, differential considerations, and care-plan implications.",
+        "Support recommendations with evidence-informed rationale.",
+        "Include shared decision-making points for patient-centered care.",
+      ],
+      cns: [
+        "Frame as practice-improvement brief with baseline, intervention, and measures.",
+        "Include coaching guidance for frontline teams.",
+        "Tie recommendations to measurable outcome and process metrics.",
+      ],
+      crna: [
+        "Organize around pre-op, intra-op, and post-op priorities.",
+        "Call out risk factors, contingency plans, and monitoring priorities.",
+        "Use concise OR-team communication language.",
+      ],
+      cnm: [
+        "Use supportive plain-language guidance for maternal-newborn care.",
+        "Include continuity checkpoints across prenatal/labor/postpartum phases.",
+        "Clearly identify escalation and handoff points.",
+      ],
+      "case-manager": [
+        "Highlight transition barriers, mitigation options, and owner accountability.",
+        "Provide timeline milestones and follow-up ownership.",
+        "Include access, social support, and equity considerations.",
+      ],
+      informatics: [
+        "Map current-state vs future-state workflow impact.",
+        "Include training, enablement, and reinforcement steps.",
+        "Define adoption metrics and data quality checks.",
+      ],
+      educator: [
+        "Start with learning objectives and competency outcomes.",
+        "Use practical scenarios, reflection prompts, and debrief guidance.",
+        "Include assessment criteria and remediation pathways.",
+      ],
+      manager: [
+        "Format as concise leadership brief with options and recommendations.",
+        "Center on quality, safety, staffing risk, and operational impact.",
+        "Close with decisions, action owners, and review cadence.",
+      ],
+    };
+
+    const expectations = [
+      { label: "SBAR format", fragment: "Format the response in SBAR (Situation, Background, Assessment, Recommendation)." },
+      { label: "SOAP format", fragment: "Format the response in SOAP style (Subjective, Objective, Assessment, Plan)." },
+      { label: "Shift-handoff ready", fragment: "Make it concise and shift-handoff ready with key risks, priorities, and follow-up actions." },
+      { label: "Patient-friendly language", fragment: "Use plain language suitable for patient or caregiver understanding." },
+      { label: "Clinical brief", fragment: "Keep clinical terminology accurate and concise for a care-team audience." },
+      { label: "Checklist output", fragment: "Provide the output as a practical checklist with clear owners and due times." },
+      { label: "Step-by-step", fragment: "Present the workflow as numbered step-by-step instructions with escalation triggers." },
+      { label: "Breakout-session ready", fragment: "Make this presentation-ready for a breakout session with clear talking points and prompts." },
+    ];
+
+    const sources = [
+      { label: "From scratch", fragment: "starting from scratch", children: expectations },
+      { label: "Using nursing notes", fragment: "using nursing notes and observations I provide: <<Nursing notes or updates>>", children: expectations },
+      { label: "Using chart/EHR context", fragment: "using chart context and EHR details I provide: <<Chart details and data points>>", children: expectations },
+      { label: "Using protocols", fragment: "using unit protocols and care pathways: <<Protocol or pathway name>>", children: expectations },
+      { label: "Using policy guidance", fragment: "using organizational policy and compliance standards: <<Policy reference>>", children: expectations },
+      { label: "Using patient education references", fragment: "using approved patient education references: <<Education source>>", children: expectations },
+      { label: "Using quality metrics", fragment: "using quality and safety metrics: <<Metric set or dashboard>>", children: expectations },
+      { label: "Using prior case examples", fragment: "using prior case examples and lessons learned: <<Case summary>>", children: expectations },
+    ];
+
+    const tree = [
+      {
+        label: "I want to create",
+        fragment: "Create",
+        children: [
+          { label: "A shift handoff", fragment: "a nursing shift handoff for <<Unit and shift window>>", children: sources },
+          { label: "A care plan", fragment: "a patient care plan for <<Patient condition or diagnosis context>>", children: sources },
+          { label: "Discharge instructions", fragment: "discharge instructions for <<Patient profile and care needs>>", children: sources },
+          { label: "Patient education content", fragment: "patient education content about <<Condition, treatment, or self-care topic>>", children: sources },
+          { label: "A unit workflow or SOP", fragment: "a unit workflow or SOP for <<Workflow or process>>", children: sources },
+          { label: "A breakout session deck outline", fragment: "a breakout session deck outline for <<Nursing topic>>", children: sources },
+          { label: "An image concept", fragment: "an image-generation prompt for <<Nursing topic>> appropriate for clinical and professional audiences", children: sources },
+          { label: "An avatar concept", fragment: "an avatar-generation prompt for <<Nurse persona or role>> for a meeting breakout session", children: sources },
+        ],
+      },
+      {
+        label: "I want to summarize",
+        fragment: "Summarize",
+        children: [
+          { label: "Shift activity", fragment: "the shift activity for <<Unit and timeframe>>", children: sources },
+          { label: "Clinical rounds", fragment: "clinical rounds for <<Patient group or service line>>", children: sources },
+          { label: "Safety incidents", fragment: "safety incidents and near-misses for <<Unit or timeframe>>", children: sources },
+          { label: "Education sessions", fragment: "training or education sessions about <<Topic>>", children: sources },
+          { label: "Patient communications", fragment: "patient and caregiver communications about <<Topic>>", children: sources },
+          { label: "Nursing team meetings", fragment: "nursing team meetings related to <<Topic or initiative>>", children: sources },
+        ],
+      },
+      {
+        label: "I want to analyze",
+        fragment: "Analyze",
+        children: [
+          { label: "Quality and safety metrics", fragment: "quality and safety metrics for <<Unit, specialty, or period>>", children: sources },
+          { label: "Staffing and capacity", fragment: "staffing, coverage, and patient load patterns for <<Unit or schedule window>>", children: sources },
+          { label: "Readmission/escalation trends", fragment: "readmission, escalation, or deterioration trends for <<Patient population>>", children: sources },
+          { label: "Workflow performance", fragment: "clinical workflow performance for <<Process or pathway>>", children: sources },
+          { label: "Documentation quality", fragment: "documentation quality and completeness for <<Documentation type>>", children: sources },
+          { label: "Patient/staff sentiment", fragment: "patient or staff sentiment themes for <<Program or unit>>", children: sources },
+        ],
+      },
+      {
+        label: "I want to plan",
+        fragment: "Help me plan",
+        children: [
+          { label: "Care transitions", fragment: "care transition planning for <<Patient cohort or workflow>>", children: sources },
+          { label: "A staffing plan", fragment: "a staffing plan for <<Unit and timeframe>>", children: sources },
+          { label: "Nurse training", fragment: "a nurse training plan for <<Skill or competency topic>>", children: sources },
+          { label: "A quality initiative", fragment: "a quality improvement initiative for <<Safety or quality target>>", children: sources },
+          { label: "Leadership meeting agenda", fragment: "a nursing leadership meeting agenda for <<Meeting objective>>", children: sources },
+          { label: "A breakout session", fragment: "a breakout session plan for <<Audience and nursing objective>>", children: sources },
+        ],
+      },
+      {
+        label: "I want to improve",
+        fragment: "Help me improve",
+        children: [
+          { label: "Clinical communication", fragment: "clinical communication across care teams for <<Scenario>>", children: sources },
+          { label: "Patient education quality", fragment: "patient education quality for <<Condition or treatment pathway>>", children: sources },
+          { label: "Documentation workflow", fragment: "documentation workflow for <<Unit or clinical area>>", children: sources },
+          { label: "Shift handoff consistency", fragment: "shift handoff consistency for <<Unit or team>>", children: sources },
+          { label: "Patient throughput", fragment: "patient throughput and coordination for <<Service line or location>>", children: sources },
+          { label: "Team wellbeing", fragment: "team wellbeing and burnout prevention for <<Nursing team>>", children: sources },
+        ],
+      },
+    ];
+
+    const state = {
+      selections: [],
+      placeholders: {},
+      providerId: providers[0].id,
+      specializationId: providers[0].specializations[0].id,
+      roleId: roles[0].id,
+      selectedContextIdea: "",
+    };
+
+    const el = {
+      providerSelect: document.getElementById("providerSelect"),
+      specialtySelect: document.getElementById("specialtySelect"),
+      roleSelect: document.getElementById("roleSelect"),
+      progress: document.getElementById("progress"),
+      crumbs: document.getElementById("crumbs"),
+      helpers: document.getElementById("helpers"),
+      levelTitle: document.getElementById("levelTitle"),
+      options: document.getElementById("options"),
+      promptPreview: document.getElementById("promptPreview"),
+      placeholderEditor: document.getElementById("placeholderEditor"),
+      statusHint: document.getElementById("statusHint"),
+      backBtn: document.getElementById("backBtn"),
+      skipBtn: document.getElementById("skipBtn"),
+      doneBtn: document.getElementById("doneBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      copyBtn: document.getElementById("copyBtn"),
+      launchBtn: document.getElementById("launchBtn"),
+    };
+
+    function getSelectedProvider() {
+      return providers.find(p => p.id === state.providerId) || providers[0];
+    }
+
+    function getSelectedSpecialization() {
+      const provider = getSelectedProvider();
+      return provider.specializations.find(s => s.id === state.specializationId) || provider.specializations[0];
+    }
+
+    function getSelectedRole() {
+      return roles.find(r => r.id === state.roleId) || roles[0];
+    }
+
+    function renderSelectors() {
+      el.providerSelect.innerHTML = providers.map(p => `<option value="${p.id}">${p.label}</option>`).join("");
+      el.providerSelect.value = state.providerId;
+
+      const provider = getSelectedProvider();
+      el.specialtySelect.innerHTML = provider.specializations.map(s => `<option value="${s.id}">${s.label}</option>`).join("");
+      if (!provider.specializations.some(s => s.id === state.specializationId)) {
+        state.specializationId = provider.specializations[0].id;
+      }
+      el.specialtySelect.value = state.specializationId;
+
+      el.roleSelect.innerHTML = roles.map(r => `<option value="${r.id}">${r.label}</option>`).join("");
+      el.roleSelect.value = state.roleId;
+    }
+
+    function getRoleGuidance() {
+      const role = getSelectedRole();
+      return role.guidance || "";
+    }
+
+    function getProviderGuidance() {
+      const provider = getSelectedProvider();
+      const spec = getSelectedSpecialization();
+      return [provider.guidance || "", spec.guidance || ""].filter(Boolean).join(" ");
+    }
+
+    function getCurrentOptions() {
+      if (state.selections.length === 0) return tree;
+      const last = state.selections[state.selections.length - 1];
+      return last.children || [];
+    }
+
+    function getCurrentLevel() {
+      return state.selections.length;
+    }
+
+    function selectOption(option, level) {
+      state.selections = state.selections.slice(0, level);
+      state.selections.push(option);
+      if (level <= 1) {
+        state.selectedContextIdea = "";
+      }
+      render();
+    }
+
+    function skipLevel() {
+      const level = getCurrentLevel();
+      if (level !== 2 && level !== 3) return;
+      const options = getCurrentOptions();
+      if (!options.length) return;
+      state.selections.push({
+        label: level === 2 ? "No additional context" : "No source specified",
+        fragment: "",
+        children: options[0].children || [],
+      });
+      render();
+    }
+
+    function doneLevel() {
+      if (getCurrentLevel() !== 4) return;
+      state.selections.push({ label: "No expectation specified", fragment: "" });
+      render();
+    }
+
+    function buildRawPrompt() {
+      if (!state.selections.length) return "";
+      const fragments = state.selections.map(s => s.fragment).filter(Boolean);
+      return [...fragments, getRoleGuidance(), getProviderGuidance()].filter(Boolean).join(" ");
+    }
+
+    function extractPlaceholders(text) {
+      const matches = text.match(/<<([^>]+)>>/g) || [];
+      return matches.map(m => m.slice(2, -2));
+    }
+
+    function buildPrompt() {
+      let text = buildRawPrompt();
+      for (const [k, v] of Object.entries(state.placeholders)) {
+        text = text.replaceAll(`<<${k}>>`, v);
+      }
+      return text;
+    }
+
+    function renderProgress() {
+      const current = getCurrentLevel();
+      el.progress.innerHTML = levels.map((l, idx) => {
+        let cls = "step";
+        if (idx < current) cls += " done";
+        else if (idx === current) cls += " active";
+        return `<span class="${cls}">${l.title}</span>`;
+      }).join("");
+    }
+
+    function renderCrumbs() {
+      el.crumbs.innerHTML = "";
+      state.selections.forEach((s, i) => {
+        const b = document.createElement("button");
+        b.className = "crumb";
+        b.textContent = s.label;
+        b.onclick = () => {
+          state.selections = state.selections.slice(0, i + 1);
+          render();
+        };
+        el.crumbs.appendChild(b);
+      });
+    }
+
+    function renderHelpers() {
+      el.helpers.innerHTML = "";
+      const level = getCurrentLevel();
+      const role = getSelectedRole();
+      if (level === 2) {
+        const ideas = roleContextIdeas[role.id] || roleContextIdeas.general;
+        ideas.forEach(idea => {
+          const b = document.createElement("button");
+          b.className = "chip";
+          b.textContent = idea;
+          b.onclick = () => {
+            state.selectedContextIdea = idea;
+            render();
+          };
+          el.helpers.appendChild(b);
+        });
+      }
+      if (level === 4) {
+        const ideas = roleExpectationIdeas[role.id] || roleExpectationIdeas.general;
+        ideas.forEach(idea => {
+          const b = document.createElement("button");
+          b.className = "chip";
+          b.textContent = idea;
+          b.onclick = () => {
+            selectOption({ label: "Expectation idea", fragment: idea }, 4);
+          };
+          el.helpers.appendChild(b);
+        });
+      }
+    }
+
+    function renderOptions() {
+      const level = getCurrentLevel();
+      const options = getCurrentOptions();
+      el.options.innerHTML = "";
+      if (level >= 5) return;
+
+      const title = levels[level]?.title || "Complete";
+      const subtitle = levels[level]?.subtitle || "";
+      el.levelTitle.textContent = `${title} — ${subtitle}`;
+
+      const withContext = level === 2 && state.selectedContextIdea
+        ? options.map(o => ({
+            ...o,
+            label: `${o.label} for selected nursing context`,
+            fragment: `${o.fragment} Focus the context on ${state.selectedContextIdea}.`,
+          }))
+        : options;
+
+      withContext.forEach(option => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `<h3>${option.label}</h3><p>${option.fragment || "No prompt fragment"}</p>`;
+        card.onclick = () => selectOption(option, level);
+        el.options.appendChild(card);
+      });
+    }
+
+    function renderPromptPreview() {
+      const raw = buildRawPrompt();
+      const completed = buildPrompt();
+      const isComplete = getCurrentLevel() === 5;
+      const placeholders = extractPlaceholders(raw);
+      const missing = placeholders.filter(p => !state.placeholders[p]);
+
+      if (!raw) {
+        el.promptPreview.textContent = "Select options to build your prompt.";
+        el.placeholderEditor.style.display = "none";
+        el.statusHint.textContent = "";
+        return;
+      }
+
+      const rendered = raw.replace(/<<([^>]+)>>/g, (_, name) => {
+        const v = state.placeholders[name];
+        if (v) return `<span class="placeholder filled">${escapeHtml(v)}</span>`;
+        return `<span class="placeholder">${escapeHtml(name)}</span>`;
+      });
+
+      el.promptPreview.innerHTML = rendered;
+
+      if (placeholders.length) {
+        const unique = [...new Set(placeholders)];
+        el.placeholderEditor.style.display = "block";
+        el.placeholderEditor.innerHTML = `
+          <h4>Fill placeholders</h4>
+          ${unique.map(name => `
+            <div style="margin-bottom:8px">
+              <label style="font-size:.8rem;color:#334155;font-weight:600;display:block;margin-bottom:4px">${escapeHtml(name)}</label>
+              <input data-ph="${escapeAttr(name)}" value="${escapeAttr(state.placeholders[name] || "")}" placeholder="Enter ${escapeAttr(name)}" />
+            </div>
+          `).join("")}
+        `;
+
+        el.placeholderEditor.querySelectorAll("input[data-ph]").forEach(input => {
+          input.addEventListener("input", (e) => {
+            const target = e.target;
+            const k = target.getAttribute("data-ph");
+            state.placeholders[k] = target.value;
+            renderPromptPreview();
+          });
+        });
+      } else {
+        el.placeholderEditor.style.display = "none";
+      }
+
+      if (!isComplete) {
+        el.statusHint.innerHTML = `Progress: <span class="warn">${getCurrentLevel()}/5</span> GCSE levels completed.`;
+      } else if (missing.length) {
+        el.statusHint.innerHTML = `Complete structure selected. <span class="warn">${missing.length} placeholder(s)</span> still need values.`;
+      } else {
+        el.statusHint.innerHTML = `<span class="good">Prompt complete and personalized.</span>`;
+      }
+
+      el.copyBtn.onclick = async () => {
+        const text = completed;
+        if (!text) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          el.copyBtn.textContent = "Copied!";
+          setTimeout(() => { el.copyBtn.textContent = "Copy Prompt"; }, 1400);
+        } catch {
+          alert("Could not copy prompt to clipboard.");
+        }
+      };
+
+      el.launchBtn.onclick = async () => {
+        const text = completed;
+        if (!text) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          window.open("https://m365.cloud.microsoft/chat", "_blank");
+        } catch {
+          window.open("https://m365.cloud.microsoft/chat", "_blank");
+        }
+      };
+    }
+
+    function renderActionStates() {
+      const level = getCurrentLevel();
+      el.backBtn.disabled = level <= 1;
+      el.skipBtn.disabled = !(level === 2 || level === 3);
+      el.doneBtn.disabled = level !== 4;
+    }
+
+    function render() {
+      renderSelectors();
+      renderProgress();
+      renderCrumbs();
+      renderHelpers();
+      renderOptions();
+      renderPromptPreview();
+      renderActionStates();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value);
+    }
+
+    el.providerSelect.addEventListener("change", (e) => {
+      state.providerId = e.target.value;
+      const provider = getSelectedProvider();
+      state.specializationId = provider.specializations[0].id;
+      render();
+    });
+
+    el.specialtySelect.addEventListener("change", (e) => {
+      state.specializationId = e.target.value;
+      render();
+    });
+
+    el.roleSelect.addEventListener("change", (e) => {
+      state.roleId = e.target.value;
+      render();
+    });
+
+    el.backBtn.addEventListener("click", () => {
+      if (state.selections.length > 0) {
+        state.selections.pop();
+        render();
+      }
+    });
+    el.skipBtn.addEventListener("click", skipLevel);
+    el.doneBtn.addEventListener("click", doneLevel);
+    el.resetBtn.addEventListener("click", () => {
+      state.selections = [];
+      state.placeholders = {};
+      state.selectedContextIdea = "";
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
