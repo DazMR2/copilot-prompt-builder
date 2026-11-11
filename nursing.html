@@ -543,67 +543,76 @@
       { label: "Using prior case examples", fragment: "using prior case examples and lessons learned: <<Case summary>>", children: expectations },
     ];
 
+    const contextOptions = [
+      { label: "Patient-centered context", fragment: "with patient-centered priorities for <<Patient population or care scenario>>", children: sources },
+      { label: "Care-team coordination context", fragment: "with multidisciplinary care-team coordination context for <<Unit or service line>>", children: sources },
+      { label: "Shift and capacity context", fragment: "considering shift workload, staffing, and capacity for <<Shift window or team>>", children: sources },
+      { label: "Safety and quality context", fragment: "with safety, quality, and risk factors for <<Clinical area or initiative>>", children: sources },
+      { label: "Education and communication context", fragment: "with education and communication context for <<Audience or stakeholder group>>", children: sources },
+      { label: "Operational context", fragment: "with operational and workflow constraints for <<Process or setting>>", children: sources },
+    ];
+
     const tree = [
       {
         label: "I want to create",
         fragment: "Create",
         children: [
-          { label: "A shift handoff", fragment: "a nursing shift handoff for <<Unit and shift window>>", children: sources },
-          { label: "A care plan", fragment: "a patient care plan for <<Patient condition or diagnosis context>>", children: sources },
-          { label: "Discharge instructions", fragment: "discharge instructions for <<Patient profile and care needs>>", children: sources },
-          { label: "Patient education content", fragment: "patient education content about <<Condition, treatment, or self-care topic>>", children: sources },
-          { label: "A unit workflow or SOP", fragment: "a unit workflow or SOP for <<Workflow or process>>", children: sources },
-          { label: "A breakout session deck outline", fragment: "a breakout session deck outline for <<Nursing topic>>", children: sources },
-          { label: "An image concept", fragment: "an image-generation prompt for <<Nursing topic>> appropriate for clinical and professional audiences", children: sources },
-          { label: "An avatar concept", fragment: "an avatar-generation prompt for <<Nurse persona or role>> for a meeting breakout session", children: sources },
+          { label: "A shift handoff", fragment: "a nursing shift handoff for <<Unit and shift window>>", children: contextOptions },
+          { label: "A care plan", fragment: "a patient care plan for <<Patient condition or diagnosis context>>", children: contextOptions },
+          { label: "Discharge instructions", fragment: "discharge instructions for <<Patient profile and care needs>>", children: contextOptions },
+          { label: "Patient education content", fragment: "patient education content about <<Condition, treatment, or self-care topic>>", children: contextOptions },
+          { label: "A unit workflow or SOP", fragment: "a unit workflow or SOP for <<Workflow or process>>", children: contextOptions },
+          { label: "A breakout session deck outline", fragment: "a breakout session deck outline for <<Nursing topic>>", children: contextOptions },
+          { label: "An image concept", fragment: "an image-generation prompt for <<Nursing topic>> appropriate for clinical and professional audiences", children: contextOptions },
+          { label: "An avatar concept", fragment: "an avatar-generation prompt for <<Nurse persona or role>> for a meeting breakout session", children: contextOptions },
         ],
       },
       {
         label: "I want to summarize",
         fragment: "Summarize",
         children: [
-          { label: "Shift activity", fragment: "the shift activity for <<Unit and timeframe>>", children: sources },
-          { label: "Clinical rounds", fragment: "clinical rounds for <<Patient group or service line>>", children: sources },
-          { label: "Safety incidents", fragment: "safety incidents and near-misses for <<Unit or timeframe>>", children: sources },
-          { label: "Education sessions", fragment: "training or education sessions about <<Topic>>", children: sources },
-          { label: "Patient communications", fragment: "patient and caregiver communications about <<Topic>>", children: sources },
-          { label: "Nursing team meetings", fragment: "nursing team meetings related to <<Topic or initiative>>", children: sources },
+          { label: "Shift activity", fragment: "the shift activity for <<Unit and timeframe>>", children: contextOptions },
+          { label: "Clinical rounds", fragment: "clinical rounds for <<Patient group or service line>>", children: contextOptions },
+          { label: "Safety incidents", fragment: "safety incidents and near-misses for <<Unit or timeframe>>", children: contextOptions },
+          { label: "Education sessions", fragment: "training or education sessions about <<Topic>>", children: contextOptions },
+          { label: "Patient communications", fragment: "patient and caregiver communications about <<Topic>>", children: contextOptions },
+          { label: "Nursing team meetings", fragment: "nursing team meetings related to <<Topic or initiative>>", children: contextOptions },
         ],
       },
       {
         label: "I want to analyze",
         fragment: "Analyze",
         children: [
-          { label: "Quality and safety metrics", fragment: "quality and safety metrics for <<Unit, specialty, or period>>", children: sources },
-          { label: "Staffing and capacity", fragment: "staffing, coverage, and patient load patterns for <<Unit or schedule window>>", children: sources },
-          { label: "Readmission/escalation trends", fragment: "readmission, escalation, or deterioration trends for <<Patient population>>", children: sources },
-          { label: "Workflow performance", fragment: "clinical workflow performance for <<Process or pathway>>", children: sources },
-          { label: "Documentation quality", fragment: "documentation quality and completeness for <<Documentation type>>", children: sources },
-          { label: "Patient/staff sentiment", fragment: "patient or staff sentiment themes for <<Program or unit>>", children: sources },
+          { label: "Quality and safety metrics", fragment: "quality and safety metrics for <<Unit, specialty, or period>>", children: contextOptions },
+          { label: "Staffing and capacity", fragment: "staffing, coverage, and patient load patterns for <<Unit or schedule window>>", children: contextOptions },
+          { label: "Readmission/escalation trends", fragment: "readmission, escalation, or deterioration trends for <<Patient population>>", children: contextOptions },
+          { label: "Workflow performance", fragment: "clinical workflow performance for <<Process or pathway>>", children: contextOptions },
+          { label: "Documentation quality", fragment: "documentation quality and completeness for <<Documentation type>>", children: contextOptions },
+          { label: "Patient/staff sentiment", fragment: "patient or staff sentiment themes for <<Program or unit>>", children: contextOptions },
         ],
       },
       {
         label: "I want to plan",
         fragment: "Help me plan",
         children: [
-          { label: "Care transitions", fragment: "care transition planning for <<Patient cohort or workflow>>", children: sources },
-          { label: "A staffing plan", fragment: "a staffing plan for <<Unit and timeframe>>", children: sources },
-          { label: "Nurse training", fragment: "a nurse training plan for <<Skill or competency topic>>", children: sources },
-          { label: "A quality initiative", fragment: "a quality improvement initiative for <<Safety or quality target>>", children: sources },
-          { label: "Leadership meeting agenda", fragment: "a nursing leadership meeting agenda for <<Meeting objective>>", children: sources },
-          { label: "A breakout session", fragment: "a breakout session plan for <<Audience and nursing objective>>", children: sources },
+          { label: "Care transitions", fragment: "care transition planning for <<Patient cohort or workflow>>", children: contextOptions },
+          { label: "A staffing plan", fragment: "a staffing plan for <<Unit and timeframe>>", children: contextOptions },
+          { label: "Nurse training", fragment: "a nurse training plan for <<Skill or competency topic>>", children: contextOptions },
+          { label: "A quality initiative", fragment: "a quality improvement initiative for <<Safety or quality target>>", children: contextOptions },
+          { label: "Leadership meeting agenda", fragment: "a nursing leadership meeting agenda for <<Meeting objective>>", children: contextOptions },
+          { label: "A breakout session", fragment: "a breakout session plan for <<Audience and nursing objective>>", children: contextOptions },
         ],
       },
       {
         label: "I want to improve",
         fragment: "Help me improve",
         children: [
-          { label: "Clinical communication", fragment: "clinical communication across care teams for <<Scenario>>", children: sources },
-          { label: "Patient education quality", fragment: "patient education quality for <<Condition or treatment pathway>>", children: sources },
-          { label: "Documentation workflow", fragment: "documentation workflow for <<Unit or clinical area>>", children: sources },
-          { label: "Shift handoff consistency", fragment: "shift handoff consistency for <<Unit or team>>", children: sources },
-          { label: "Patient throughput", fragment: "patient throughput and coordination for <<Service line or location>>", children: sources },
-          { label: "Team wellbeing", fragment: "team wellbeing and burnout prevention for <<Nursing team>>", children: sources },
+          { label: "Clinical communication", fragment: "clinical communication across care teams for <<Scenario>>", children: contextOptions },
+          { label: "Patient education quality", fragment: "patient education quality for <<Condition or treatment pathway>>", children: contextOptions },
+          { label: "Documentation workflow", fragment: "documentation workflow for <<Unit or clinical area>>", children: contextOptions },
+          { label: "Shift handoff consistency", fragment: "shift handoff consistency for <<Unit or team>>", children: contextOptions },
+          { label: "Patient throughput", fragment: "patient throughput and coordination for <<Service line or location>>", children: contextOptions },
+          { label: "Team wellbeing", fragment: "team wellbeing and burnout prevention for <<Nursing team>>", children: contextOptions },
         ],
       },
     ];
@@ -838,6 +847,9 @@
       el.promptPreview.innerHTML = rendered;
 
       if (placeholders.length) {
+        const activeInput = el.placeholderEditor.querySelector("input[data-ph]:focus");
+        const activePlaceholderKey = activeInput ? activeInput.getAttribute("data-ph") : null;
+        const activeSelectionStart = activeInput && typeof activeInput.selectionStart === "number" ? activeInput.selectionStart : null;
         const unique = [...new Set(placeholders)];
         el.placeholderEditor.style.display = "block";
         el.placeholderEditor.innerHTML = `
@@ -858,6 +870,21 @@
             renderPromptPreview();
           });
         });
+
+        if (activePlaceholderKey) {
+          let restoredInput = null;
+          el.placeholderEditor.querySelectorAll("input[data-ph]").forEach((candidate) => {
+            if (!restoredInput && candidate.getAttribute("data-ph") === activePlaceholderKey) {
+              restoredInput = candidate;
+            }
+          });
+          if (restoredInput) {
+            restoredInput.focus();
+            if (activeSelectionStart !== null) {
+              restoredInput.setSelectionRange(activeSelectionStart, activeSelectionStart);
+            }
+          }
+        }
       } else {
         el.placeholderEditor.style.display = "none";
       }
