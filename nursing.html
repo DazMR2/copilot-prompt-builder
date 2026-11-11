@@ -1011,7 +1011,10 @@
       const level = getCurrentLevel();
       const options = getCurrentOptions();
       el.options.innerHTML = "";
-      if (level >= 5) return;
+      if (level >= 5) {
+        el.levelTitle.textContent = "Prompt Complete - Please Review";
+        return;
+      }
 
       const title = levels[level]?.title || "Complete";
       const subtitle = levels[level]?.subtitle || "";
