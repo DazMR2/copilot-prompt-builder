@@ -295,6 +295,137 @@
       line-height: 1.45;
     }
 
+    .sidebar-progress {
+      margin-top: 16px;
+    }
+    .sidebar-progress h3 {
+      margin: 0 0 8px;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--muted);
+    }
+    .sidebar-progress-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 10px;
+      margin-bottom: 8px;
+      background: #fff;
+    }
+    .sidebar-progress-item .dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      background: #e2e8f0;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      flex: 0 0 auto;
+    }
+    .sidebar-progress-item.active {
+      border-color: #7dd3fc;
+      background: #f0f9ff;
+    }
+    .sidebar-progress-item.done {
+      border-color: #99f6e4;
+      background: #ecfdf5;
+    }
+    .sidebar-progress-item.done .dot {
+      background: #0f766e;
+      color: #fff;
+      border-color: #0f766e;
+    }
+    .sidebar-progress-item.active .dot {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #0c4a6e;
+    }
+    .sidebar-progress-item .meta {
+      min-width: 0;
+    }
+    .sidebar-progress-item .meta .title {
+      font-size: .84rem;
+      font-weight: 700;
+      margin-bottom: 1px;
+    }
+    .sidebar-progress-item .meta .value {
+      font-size: .76rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .45);
+      z-index: 40;
+      display: none;
+    }
+    .sheet-overlay.open {
+      display: block;
+    }
+    .sheet {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(540px, 94vw);
+      height: 100vh;
+      background: #fff;
+      border-left: 1px solid var(--border);
+      box-shadow: -10px 0 30px rgba(2, 8, 23, .12);
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform .18s ease;
+      padding: 18px 16px 20px;
+      overflow: auto;
+    }
+    .sheet.open {
+      transform: translateX(0);
+    }
+    .sheet-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sheet h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .sheet p.sheet-sub {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .sheet .box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+    .sheet .box h4 {
+      margin: 0 0 4px;
+      font-size: .92rem;
+    }
+    .sheet .box p {
+      margin: 0;
+      color: #334155;
+      font-size: .86rem;
+      line-height: 1.42;
+    }
+
     @media (max-width: 1180px) {
       .page { grid-template-columns: 1fr; }
       .sidebar {
@@ -321,6 +452,12 @@
         <h1>Prompt Builder Nursing Edition</h1>
         <p class="sub">Create clinical and non-clinical nurse-ready prompts, including image and avatar prompt options for breakout sessions.</p>
       </header>
+
+      <div class="toolbar">
+        <button class="btn" id="openGcseBtn">What is GCSE?</button>
+        <button class="btn" id="openDisclaimerBtn">Disclaimer</button>
+        <button class="btn" id="openInstructionsBtn">Instructions</button>
+      </div>
 
       <div class="toolbar">
         <a class="btn" href="./index.html">← General Prompt Builder</a>
@@ -368,12 +505,56 @@
       <div class="prompt-box" id="promptPreview">Select options to build your prompt.</div>
       <div class="placeholder-editor" id="placeholderEditor" style="display:none"></div>
       <div class="hint" id="statusHint"></div>
+      <div class="sidebar-progress" id="sidebarProgress"></div>
 
       <div class="tip">
         <strong>Tip:</strong> Review generated prompt content for clinical accuracy, local policy alignment, and privacy requirements before use.
       </div>
     </aside>
   </div>
+
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+
+  <section class="sheet" id="gcseSheet">
+    <div class="sheet-header">
+      <div>
+        <h3>What is GCSE?</h3>
+        <p class="sheet-sub">The guided prompt structure used to build stronger Copilot prompts.</p>
+      </div>
+      <button class="btn" data-close-sheet="gcseSheet">Close</button>
+    </div>
+    <div class="box"><h4>Goal</h4><p>Define what you want Copilot to accomplish.</p></div>
+    <div class="box"><h4>Context</h4><p>Add patient, team, role, specialty, or workflow context to improve relevance.</p></div>
+    <div class="box"><h4>Source</h4><p>Specify what references, notes, chart details, or metrics Copilot should use.</p></div>
+    <div class="box"><h4>Expectations</h4><p>Describe structure, tone, length, and output quality requirements.</p></div>
+  </section>
+
+  <section class="sheet" id="disclaimerSheet">
+    <div class="sheet-header">
+      <div>
+        <h3>Microsoft terms disclaimer</h3>
+        <p class="sheet-sub">Summary guidance for responsible use of generated prompts and responses.</p>
+      </div>
+      <button class="btn" data-close-sheet="disclaimerSheet">Close</button>
+    </div>
+    <div class="box"><h4>Use and verification</h4><p>AI-generated content may be inaccurate or incomplete. Review, validate, and edit outputs before relying on them or sharing them.</p></div>
+    <div class="box"><h4>Data and privacy</h4><p>Do not include confidential, regulated, or personal data unless your organization permits it and use complies with Microsoft Online Services Terms and privacy commitments.</p></div>
+    <div class="box"><h4>Your responsibility</h4><p>You are responsible for prompts, outputs, decisions, and compliance with applicable laws and organizational policy.</p></div>
+  </section>
+
+  <section class="sheet" id="instructionsSheet">
+    <div class="sheet-header">
+      <div>
+        <h3>How to use this app</h3>
+        <p class="sheet-sub">Follow the GCSE flow, fill placeholders, then copy and use your prompt in Copilot.</p>
+      </div>
+      <button class="btn" data-close-sheet="instructionsSheet">Close</button>
+    </div>
+    <div class="box"><h4>1. Work left to right</h4><p>Select Goal, Goal Task, Context, Source, and Expectations.</p></div>
+    <div class="box"><h4>2. Use role suggestions</h4><p>At Context and Expectations steps, use nurse-type ideas to speed prompt building.</p></div>
+    <div class="box"><h4>3. Fill placeholders</h4><p>Type values for highlighted placeholders to personalize your prompt.</p></div>
+    <div class="box"><h4>4. Review before use</h4><p>Check for clinical accuracy and local policy alignment before operational use.</p></div>
+  </section>
 
   <script>
     const levels = [
@@ -644,6 +825,14 @@
       resetBtn: document.getElementById("resetBtn"),
       copyBtn: document.getElementById("copyBtn"),
       launchBtn: document.getElementById("launchBtn"),
+      sidebarProgress: document.getElementById("sidebarProgress"),
+      sheetOverlay: document.getElementById("sheetOverlay"),
+      openGcseBtn: document.getElementById("openGcseBtn"),
+      openDisclaimerBtn: document.getElementById("openDisclaimerBtn"),
+      openInstructionsBtn: document.getElementById("openInstructionsBtn"),
+      gcseSheet: document.getElementById("gcseSheet"),
+      disclaimerSheet: document.getElementById("disclaimerSheet"),
+      instructionsSheet: document.getElementById("instructionsSheet"),
     };
 
     function getSelectedProvider() {
@@ -921,6 +1110,26 @@
       };
     }
 
+    function renderSidebarProgress() {
+      const current = getCurrentLevel();
+      el.sidebarProgress.innerHTML = `<h3>GCSE Progress</h3>` + levels.map((level, idx) => {
+        let cls = "sidebar-progress-item";
+        if (idx < current) cls += " done";
+        else if (idx === current) cls += " active";
+        const selected = state.selections[idx];
+        const value = selected ? escapeHtml(selected.label) : "&nbsp;";
+        return `
+          <div class="${cls}">
+            <span class="dot">${idx < current ? "✓" : (idx + 1)}</span>
+            <div class="meta">
+              <div class="title">${escapeHtml(level.title)}</div>
+              <div class="value">${value}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
     function renderActionStates() {
       const level = getCurrentLevel();
       el.backBtn.disabled = level <= 1;
@@ -935,6 +1144,7 @@
       renderHelpers();
       renderOptions();
       renderPromptPreview();
+      renderSidebarProgress();
       renderActionStates();
     }
 
@@ -949,6 +1159,19 @@
 
     function escapeAttr(value) {
       return escapeHtml(value);
+    }
+
+    function closeSheets() {
+      el.sheetOverlay.classList.remove("open");
+      [el.gcseSheet, el.disclaimerSheet, el.instructionsSheet].forEach((sheet) => {
+        sheet.classList.remove("open");
+      });
+    }
+
+    function openSheet(sheetEl) {
+      closeSheets();
+      el.sheetOverlay.classList.add("open");
+      sheetEl.classList.add("open");
     }
 
     el.providerSelect.addEventListener("change", (e) => {
@@ -981,6 +1204,17 @@
       state.placeholders = {};
       state.selectedContextIdea = "";
       render();
+    });
+
+    el.openGcseBtn.addEventListener("click", () => openSheet(el.gcseSheet));
+    el.openDisclaimerBtn.addEventListener("click", () => openSheet(el.disclaimerSheet));
+    el.openInstructionsBtn.addEventListener("click", () => openSheet(el.instructionsSheet));
+    el.sheetOverlay.addEventListener("click", closeSheets);
+    document.querySelectorAll("[data-close-sheet]").forEach((btn) => {
+      btn.addEventListener("click", closeSheets);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeSheets();
     });
 
     render();
