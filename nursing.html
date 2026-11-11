@@ -748,6 +748,17 @@
       { label: "Breakout-session ready", fragment: "Make this presentation-ready for a breakout session with clear talking points and prompts." },
     ];
 
+    const visualExpectations = [
+      { label: "Realistic style", fragment: "Use a realistic photographic style with natural lighting, accurate proportions, and professional detail." },
+      { label: "Cartoon style", fragment: "Use a clean cartoon illustration style with expressive features and professional tone." },
+      { label: "Disney-inspired style", fragment: "Use a Disney-inspired animated style with warm, polished character design and friendly expression." },
+      { label: "Anime style", fragment: "Use an anime-inspired style with clear line work, cinematic shading, and dynamic composition." },
+      { label: "Pixar-inspired style", fragment: "Use a Pixar-inspired 3D animated style with rich lighting, depth, and approachable character styling." },
+      { label: "Comic-book style", fragment: "Use a comic-book style with bold outlines, stylized shading, and strong visual storytelling." },
+      { label: "3D render style", fragment: "Use a high-quality 3D render style with realistic materials, depth, and studio-quality lighting." },
+      { label: "Watercolor style", fragment: "Use a watercolor illustration style with soft gradients, subtle textures, and gentle color transitions." },
+    ];
+
     const sources = [
       { label: "From scratch", fragment: "starting from scratch", children: expectations },
       { label: "Using nursing notes", fragment: "using nursing notes and observations I provide: <<Nursing notes or updates>>", children: expectations },
@@ -757,6 +768,14 @@
       { label: "Using patient education references", fragment: "using approved patient education references: <<Education source>>", children: expectations },
       { label: "Using quality metrics", fragment: "using quality and safety metrics: <<Metric set or dashboard>>", children: expectations },
       { label: "Using prior case examples", fragment: "using prior case examples and lessons learned: <<Case summary>>", children: expectations },
+    ];
+
+    const visualSources = [
+      { label: "From scratch", fragment: "starting from scratch", children: visualExpectations },
+      { label: "Using visual references", fragment: "using visual references I provide: <<Reference links or examples>>", children: visualExpectations },
+      { label: "Using brand/style guidelines", fragment: "following style and brand guidance: <<Style guidance>>", children: visualExpectations },
+      { label: "Using character notes", fragment: "using character notes and descriptors: <<Character notes>>", children: visualExpectations },
+      { label: "Using audience context", fragment: "tailored for this audience context: <<Audience context>>", children: visualExpectations },
     ];
 
     const contextOptions = [
@@ -772,32 +791,60 @@
       {
         label: "Professional headshot avatar",
         fragment: "as a professional headshot of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action or expression>>",
-        children: sources
+        children: visualSources
       },
       {
         label: "On-shift action avatar",
         fragment: "as an action-style avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
-        children: sources
+        children: visualSources
       },
       {
         label: "Leadership round avatar",
         fragment: "as a nursing leadership avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
-        children: sources
+        children: visualSources
       },
       {
         label: "Team huddle avatar",
         fragment: "as a collaborative team-huddle avatar featuring <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
-        children: sources
+        children: visualSources
       },
       {
         label: "Patient education avatar",
         fragment: "as a patient-education avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
-        children: sources
+        children: visualSources
       },
       {
         label: "Telehealth avatar",
         fragment: "as a telehealth-style avatar of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
-        children: sources
+        children: visualSources
+      },
+    ];
+
+    const imageContextOptions = [
+      {
+        label: "Clinical scene image",
+        fragment: "as a clinical scene image of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: visualSources
+      },
+      {
+        label: "Patient education image",
+        fragment: "as a patient-education image of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: visualSources
+      },
+      {
+        label: "Team collaboration image",
+        fragment: "as a team collaboration image of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: visualSources
+      },
+      {
+        label: "Leadership spotlight image",
+        fragment: "as a leadership spotlight image of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: visualSources
+      },
+      {
+        label: "Innovation and technology image",
+        fragment: "as an innovation-focused nursing image of <<Person description>> wearing <<Uniform or attire>> in <<Work setting>> while <<Action>>",
+        children: visualSources
       },
     ];
 
@@ -812,8 +859,8 @@
           { label: "Patient education content", fragment: "patient education content about <<Condition, treatment, or self-care topic>>", children: contextOptions },
           { label: "A unit workflow or SOP", fragment: "a unit workflow or SOP for <<Workflow or process>>", children: contextOptions },
           { label: "A breakout session deck outline", fragment: "a breakout session deck outline for <<Nursing topic>>", children: contextOptions },
-          { label: "An image concept", fragment: "an image-generation prompt for <<Nursing topic>> appropriate for clinical and professional audiences", children: contextOptions },
-          { label: "An avatar concept", fragment: "an avatar-generation prompt for <<Nurse persona or role>> for a meeting breakout session", children: avatarContextOptions },
+          { label: "An image concept", fragment: "an image concept for <<Nursing topic>> appropriate for clinical and professional audiences", children: imageContextOptions },
+          { label: "An avatar concept", fragment: "an avatar concept for <<Nurse persona or role>>", children: avatarContextOptions },
         ],
       },
       {
